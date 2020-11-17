@@ -4,6 +4,7 @@ import os
 
 import cv2
 import numpy as np
+import scipy.io as sio
 
 from misc.patch_extractor import PatchExtractor
 from misc.utils import rm_n_mkdir
@@ -33,10 +34,10 @@ if __name__ == '__main__':
 
     ### Paths to data - these need to be modified according to where the original data is stored
     img_ext = '.png'
-    img_dir = '../../../data/CoNSeP/train/Images/'
-    ann_dir = '../../../data/CoNSeP/train/Labels/' 
+    img_dir = '../data/CoNSeP/valid/Images/'
+    ann_dir = '../data/CoNSeP/valid/Labels/'
     ####
-    out_dir = "../../../CoNSeP/train/%dx%d_%dx%d" % \
+    out_dir = "../CoNSeP/valid/%dx%d_%dx%d" % \
                         (win_size[0], win_size[1], step_size[0], step_size[1])
 
     file_list = glob.glob('%s/*%s' % (img_dir, img_ext))

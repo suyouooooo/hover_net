@@ -71,8 +71,8 @@ class Config(object):
         self.data_ext = '.npy' 
         # list of directories containing validation patches. 
         # For both train and valid directories, a comma separated list of directories can be used
-        self.train_dir = ['../../../CoNSeP/train/%s/'  % data_code_dict[self.model_type]]
-        self.valid_dir = ['../../../CoNSeP/valid/%s/' % data_code_dict[self.model_type]]
+        self.train_dir = ['../CoNSeP/train/%s/'  % data_code_dict[self.model_type]]
+        self.valid_dir = ['../CoNSeP/valid/%s/' % data_code_dict[self.model_type]]
 
         # number of processes for parallel processing input
         self.nr_procs_train = 8 
@@ -85,7 +85,7 @@ class Config(object):
         model_id = '%s' % self.model_type
         self.model_name = '%s/%s' % (exp_id, model_id)
         # loading chkpts in tensorflow, the path must not contain extra '/'
-        self.log_path = '/media/vqdang/logs/' # log root path - modify according to needs
+        self.log_path = '../logs/' # log root path - modify according to needs
         self.save_dir = '%s/%s' % (self.log_path, self.model_name) # log file destination
 
         #### Info for running inference
@@ -98,8 +98,8 @@ class Config(object):
         # while [Nuclei Pixels][Additional] will be used for extracting instances
 
         self.inf_imgs_ext = '.png'
-        self.inf_data_dir = '../../../data/CoNSeP/test/Images/'
-        self.inf_output_dir = 'output/%s/%s/' % (exp_id, model_id)
+        self.inf_data_dir = '../data/CoNSeP/test/Images/'
+        self.inf_output_dir = '../output/%s/%s/' % (exp_id, model_id)
 
         # for inference during evalutaion mode i.e run by infer.py
         self.eval_inf_input_tensor_names = ['images']
