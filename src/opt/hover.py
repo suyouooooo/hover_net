@@ -23,9 +23,9 @@ np_hv = {
     'training_phase'    : [
         {
             'nr_epochs': 50,
-            'manual_parameters' : { 
+            'manual_parameters' : {
                 # tuple(initial value, schedule)
-                'learning_rate': (1.0e-4, [('25', 1.0e-5)]), 
+                'learning_rate': (1.0e-4, [('25', 1.0e-5)]),
             },
             'pretrained_path'  : '../pretrained/ImageNet-ResNet50-Preact.npz',
             'train_batch_size' : 8,

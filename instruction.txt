@@ -1,0 +1,51 @@
+1.整体流程：
+
+验证集可以从训练集中随机选取一部分
+The impact of valid on the results #66
+
+如果不使用预训练模型，就把'pretrained_path' : '../../../pretrained/ImageNet-ResNet50-Preact.npz'中的路径换成None就可以。
+About pre-training #63
+
+首先拆分训练集和验证集，然后在extract_patches.py中对训练集和验证集分块，就可以得到../ConSep/train/540*540和../ConSep/valid/540*540文件夹。
+valid data #55
+
+
+出错：  File "/home/syh/anaconda3/envs/hover_net/lib/python3.6/site-packages/tensorpack/graph_builder/utils.py", line 84, in __call__
+    from tensorflow.python.training.device_util import canonicalize
+ModuleNotFoundError: No module named 'tensorflow.python.training.device_util'
+错误原因猜想：tensorflow版本不同导致可以使用的包不一样，解决办法可能是把这个包手动导入到tensorflow-gpu==1.13.1的对应的地方去【可以解决！！！】
+
+
+在训练前，需要下载预训练模型，然后在config.py中设置预训练模型的路径、数据目录的路径、checkpoint保存的路径。
+
+接着可以运行train.py进行训练，在训练时可以设置config.py中的self.type_classification属性，选择是否需要在分割mask的时候同时进行分类。
+
+如果想生成网络的预测，可以运行infer.py，在运行前，需要设置output保存的路径、数据根目录的路径、checkpoint的路径。
+
+如果想要获得最后的实例分割结果，需要运行process.py来进行网络预测的后处理。
+
+
+
+2.extract_patches.py代码详解：
+
+extract_type = 'mirror'和extract_type = 'valid'的区别
+当extract_type = 'valid'时，提取的补丁没有填充，只在情况下win_size > step_size可以正常运行，
+注意:为了处理边界上的其余部分，也就是当向左->向右，上->向下滑动时不合适的部分，我们翻转滑动方向，然后从右/底边缘提取1个patch。在右下角会有一个额外的补丁被提取出来
+当extract_type = 'mirror'时，提取的patch用镜像填充边界，使每个小块的中心区域始终在原始(无填充)图像内，而所有小块的中心区域覆盖整个原始图像
+
+step_size的设置要与opt中网络的train_mask_shape一致
+win_size至少要两倍大于step_size
+
+论文中使用了核的类别是三类，所以使用
+ann_type[(ann_type == 3) | (ann_type == 4)] = 3
+ann_type[(ann_type == 5) | (ann_type == 6) | (ann_type == 7)] = 4
+将3类和4类聚合成3类，将5类、6类、7类聚合成4类。
+
+把对应的数据加到原本的RGB图像上，将数据从3维的变成4维的或者5维的。
+
+
+3.train.py代码详解：
+
+训练时会先由train_generator获取data_generator数据生成器，然后获得image和label配对的数据，其中，根据网络选取的不同，label的通道数也不一样（readme里有提到）
+然后使用from tensorpack import imgaug的一些方法对数据进行数据增强
+

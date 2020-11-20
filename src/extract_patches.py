@@ -55,11 +55,14 @@ if __name__ == '__main__':
         if cfg.type_classification:
             # assumes that ann is HxWx2 (nuclei class labels are available at index 1 of C) 
             ann = sio.loadmat(ann_dir + basename + '.mat')
+            # type(ann_inst) is <class 'numpy.ndarray'>
+            # type(ann_type) is <class 'numpy.ndarray'>
             ann_inst = ann['inst_map']
             ann_type = ann['type_map']
-            
+
             # merge classes for CoNSeP (in paper we only utilise 3 nuclei classes and background)
             # If own dataset is used, then the below may need to be modified
+            # My point: ann_type == 3 return True/false, Change the corresponding position in ann_type to a specific value（exp 3. 4.）
             ann_type[(ann_type == 3) | (ann_type == 4)] = 3
             ann_type[(ann_type == 5) | (ann_type == 6) | (ann_type == 7)] = 4
 

@@ -135,11 +135,13 @@ class Trainer(Config):
     ####
     def get_datagen(self, batch_size, mode='train', view=False):
         if mode == 'train':
+            # data augment using 'from tensorpack import imgaug'
             augmentors = self.get_train_augmentors(
                                             self.train_input_shape,
                                             self.train_mask_shape,
                                             view)
             data_files = get_files(self.train_dir, self.data_ext)
+            # get data_generator
             data_generator = loader.train_generator
             nr_procs = self.nr_procs_train
         else:
